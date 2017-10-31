@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/main.css">
+  <title>Lattest</title>
+</head>
+
+<body>
+  <div class="menu">
+    <div class="elem" onclick="goToTest()">Пройти тест</div>
+    <div class="elem" onclick="createChangeTest()">Создать/редактировать<br>тесты</div>
+    <div class="elem" onclick="goOptions()">Опции</div>
+    <div class="elem" onclick="goAbout()">О программе</div>
+    <div class="elem" onclick="exit()">Выход</div>
+  </div>
+  <script>
+    var win = nw.Window.get();
+
+
+    function goToTest(){
+      alert('Test');
+    }
+    function exit(){
+      win.close();
+    }
+
+  </script>
+</body>
+
+</html>

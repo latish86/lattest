@@ -1,0 +1,8 @@
+{
+  "name": "Lattest",
+  "main": "main.html",
+  "window": {
+    "height": 400,
+    "width": 300
+  }
+}
