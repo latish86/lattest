@@ -12,19 +12,33 @@
 <body>
   <div class="menu">
     <div class="elem" onclick="goToTest()">Пройти тест</div>
-    <div class="elem" onclick="createChangeTest()">Создать/редактировать<br>тесты</div>
+    <div class="elem" onclick="createChangeTest()">Создать/редактировать
+      <br>тесты</div>
     <div class="elem" onclick="goOptions()">Опции</div>
     <div class="elem" onclick="goAbout()">О программе</div>
     <div class="elem" onclick="exit()">Выход</div>
   </div>
   <script>
-    var win = nw.Window.get();
+    var win = nw.Window.get(); // main window
 
-
-    function goToTest(){
-      alert('Test');
+    // Page test execution
+    function goToTest() {
+      nw.Window.open('runtest.html', {}, function (new_win) {
+        win.close();
+      });
     }
-    function exit(){
+
+    // Page test create/change
+    function createChangeTest() {
+      nw.Window.open('change.html', {}, function (new_win) {
+        nw.global.test = 'AHHAAAHAHAHHAHAHAH';
+        win.close();
+      });
+    }
+
+
+    // exit programm
+    function exit() {
       win.close();
     }
 
