@@ -1,0 +1,40 @@
+Мокапы страниц:
+https://ninjamock.com/Designer/Workplace/1632430/Page1
+
+Тесты храним в json в файле
+модель:
+{
+  title : <str>
+  create_date: <date>
+  last_change_date: <date>
+  questions :[
+    {
+      title: <str>
+      description: <str>
+      answers:[
+        {
+          answer: <str>
+        },
+        {
+          answer: <str>
+        },
+        ...
+      ]
+    },
+    {
+      title: <str>
+      description: <str>
+      answers:[
+        {
+          answer: <str>
+        },
+        {
+          answer: <str>
+        },
+        ...
+      ]
+    },
+    ...
+  ]
+  }
+}

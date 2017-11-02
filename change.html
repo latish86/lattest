@@ -12,44 +12,63 @@
   <script>
     var win = nw.Window.get(); // main window
 
+    function createTests() {
+      var form = document.createElement('form');      
+      var title = document.createElement('input');
+      var body = document.getElementsByTagName('body')
+      body[0].appendChild(form);
+      form.appendChild(title);
+    }
+
+    function createMenu() {
+      // Create an empty menubar
+      var menu = new nw.Menu({ type: 'menubar' });
+
+      // Create a submenu as the 2nd level menu
+      var submenu = new nw.Menu();
+      submenu.append(new nw.MenuItem({
+        label: 'Создать тест',
+        click: createTests
+      }));
+      submenu.append(new nw.MenuItem({ label: 'Открыть тест' }));
+      submenu.append(new nw.MenuItem({ type: "separator" }));
+      submenu.append(new nw.MenuItem({ label: 'Сохранить тест' }));
+      submenu.append(new nw.MenuItem({ label: 'Сохранить тест как' }));
+      submenu.append(new nw.MenuItem({ type: "separator" }));
+      submenu.append(new nw.MenuItem({
+        label: 'Выход в меню',
+        click: function () {
+          nw.Window.open('main.html', {}, function (new_win) {
+            new_win.height = 400;
+            new_win.width = 300;
+            win.close();
+          });
+        },
+      }));
+      submenu.append(new nw.MenuItem({
+        label: 'Закрыть программу',
+        click: function () {
+          win.close();
+        },
+      }));
+
+      // Create and append the 1st level menu to the menubar
+      menu.append(new nw.MenuItem({
+        label: 'Файл',
+        submenu: submenu
+      }));
+
+      // Assign it to `window.menu` to get the menu displayed
+      nw.Window.get().menu = menu;
+    };
+
+
+
+    createMenu();
+
     alert(nw.global.test);
 
-    // Create an empty menubar
-    var menu = new nw.Menu({ type: 'menubar' });
 
-    // Create a submenu as the 2nd level menu
-    var submenu = new nw.Menu();
-    submenu.append(new nw.MenuItem({ label: 'Создать тест' }));
-    submenu.append(new nw.MenuItem({ label: 'Открыть тест' }));
-    submenu.append(new nw.MenuItem({ type: "separator" }));
-    submenu.append(new nw.MenuItem({ label: 'Сохранить тест' }));
-    submenu.append(new nw.MenuItem({ label: 'Сохранить тест как' }));
-    submenu.append(new nw.MenuItem({ type: "separator" }));
-    submenu.append(new nw.MenuItem({
-      label: 'Выход в меню',
-      click: function () {
-        nw.Window.open('main.html', {}, function (new_win) {
-          new_win.height = 400;
-          new_win.width = 300;        
-          win.close();
-        });
-      },
-    }));
-    submenu.append(new nw.MenuItem({
-      label: 'Закрыть программу',
-      click: function () {
-        win.close();
-      },
-    }));
-
-    // Create and append the 1st level menu to the menubar
-    menu.append(new nw.MenuItem({
-      label: 'Файл',
-      submenu: submenu
-    }));
-
-    // Assign it to `window.menu` to get the menu displayed
-    nw.Window.get().menu = menu;
   </script>
 </body>
 
