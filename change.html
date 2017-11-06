@@ -5,24 +5,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/change.css">
   <title>Создать/редактировать тест</title>
 </head>
 
 <body>
+  <div class="content">
+
+  </div>
   <script>
     var win = nw.Window.get(); // main window
+    var creating = false;
 
     function createTests() {
-      var form = document.createElement('form');      
-      var title = document.createElement('input');
-      var body = document.getElementsByTagName('body')
-      body[0].appendChild(form);
-      form.appendChild(title);
+      if (creating){
+        nw.global.modalParam = {
+          text: 'Какой-то тест уже редактируется...',
+          type: 'yesno',
+          title: 'Сохранить?'
+        }
+        nw.Window.open('./html/yesno.html', {
+          "show_in_taskbar": false,
+          // "kiosk": true
+          "frame": true
+          
+        }, function (new_win) {
+          // win.close();
+        });
+      }
+      var content = document.getElementsByClassName('content'); 
+      content[0].innerHTML = '\
+        <div class="title">\
+          <div>Название теста: </div><input type="text">\
+        </div>\
+        <div class="questions">\
+          <div class="questions q1">\
+            <div class="text"><div>Текст вопроса:</div><textarea rows="3"></textarea></div>\
+            <div class="answers">\
+              <div>Ответы:</div>\
+              <ul>\
+                <li><div>a):</div> <input type="text"></li>\
+                <li><div>b):</div> <input type="text"></li>\
+                <li><div>c):</div> <input type="text"></li>\
+                <li><div>d):</div> <input type="text"></li>\
+                <li class="add-answer">Добавить ответ</li>\
+              </ul>\
+            </div>\
+          </div>\
+          <div class="add-question">Добавить вопрос</div>\
+        </div>\
+      ';
+      creating = true;
+      
     }
 
     function createMenu() {
       // Create an empty menubar
       var menu = new nw.Menu({ type: 'menubar' });
+
+      var win = nw.Window.get(); // current window
+
+      win.height = 600;
+      win.width  = 600;
+      win.setPosition('center')
 
       // Create a submenu as the 2nd level menu
       var submenu = new nw.Menu();
@@ -38,7 +84,7 @@
       submenu.append(new nw.MenuItem({
         label: 'Выход в меню',
         click: function () {
-          nw.Window.open('main.html', {}, function (new_win) {
+          nw.Window.open('menu.html', {}, function (new_win) {
             new_win.height = 400;
             new_win.width = 300;
             win.close();
@@ -57,16 +103,25 @@
         label: 'Файл',
         submenu: submenu
       }));
+      menu.append(new nw.MenuItem({
+        label: 'Обновить',
+        click: function(){
+          win.reload()
+        }
+      }));
 
       // Assign it to `window.menu` to get the menu displayed
       nw.Window.get().menu = menu;
     };
 
-
+    function debug(){
+      createTests();
+    }
 
     createMenu();
+    debug();
 
-    alert(nw.global.test);
+    
 
 
   </script>

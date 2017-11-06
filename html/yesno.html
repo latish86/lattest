@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/yesno.css">
+</head>
+<body>
+  <div class="content"></div>
+  <script>
+    var win = nw.Window.get(); // main window
+    win.setResizable(false)
+    win.setAlwaysOnTop(true)
+    // win.toolbar =  false
+    
+
+
+    var content = document.getElementsByClassName('content'); 
+
+    function viewModal(){
+      if(nw.global.modalParam){
+        let text = nw.global.modalParam.text;
+        let type = nw.global.modalParam.type;
+        win.title = nw.global.modalParam.title;
+
+        content[0].innerHTML = `${text}`;
+
+        console.log(content[0]);
+
+
+
+
+
+        nw.global.modalParam = undefined;
+      }else{
+        alert('Стандартное окно')
+      }
+      
+      content[0].innerHtml = 'param.text';
+    }
+
+    viewModal()
+     
+  </script>
+</body>
+</html>

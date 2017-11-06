@@ -1,0 +1,44 @@
+*{
+    font-size: 14px;
+}
+.content{
+    margin: 10px;
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+input, textarea{
+    padding: 5px;
+    resize: none;
+}
+
+.title div, .text div, .answers>div{    
+    margin-bottom: 5px;
+}
+
+.text{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    margin-bottom: 15px;
+}
+
+.answers li{
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.answers li input{
+    flex-grow:1;
+}
+
+.answers li div{
+    display: inline-block;
+    width: 20px;
+}
