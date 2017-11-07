@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/change.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/change.css">
   <title>Создать/редактировать тест</title>
 </head>
 
@@ -17,25 +17,19 @@
   <script>
     var win = nw.Window.get(); // main window
     var creating = false;
+    var content = document.getElementsByClassName('content');
+    var menu;
 
     function createTests() {
-      if (creating){
-        nw.global.modalParam = {
-          text: 'Какой-то тест уже редактируется...',
-          type: 'yesno',
-          title: 'Сохранить?'
+      if (creating) {
+        param = {
+          text: `Данные редактируются...
+          Вы действительно хотите создать новый тест?`
         }
-        nw.Window.open('./html/yesno.html', {
-          "show_in_taskbar": false,
-          // "kiosk": true
-          "frame": true
-          
-        }, function (new_win) {
-          // win.close();
-        });
-      }
-      var content = document.getElementsByClassName('content'); 
-      content[0].innerHTML = '\
+        yesno(param);
+      } else {
+        var content = document.getElementsByClassName('content');
+        content[0].innerHTML = '\
         <div class="title">\
           <div>Название теста: </div><input type="text">\
         </div>\
@@ -56,18 +50,20 @@
           <div class="add-question">Добавить вопрос</div>\
         </div>\
       ';
-      creating = true;
-      
+        creating = true;
+      }
     }
 
     function createMenu() {
       // Create an empty menubar
-      var menu = new nw.Menu({ type: 'menubar' });
+      menu = new nw.Menu({ type: 'menubar' });
+
+     
 
       var win = nw.Window.get(); // current window
 
       win.height = 600;
-      win.width  = 600;
+      win.width = 600;
       win.setPosition('center')
 
       // Create a submenu as the 2nd level menu
@@ -105,7 +101,7 @@
       }));
       menu.append(new nw.MenuItem({
         label: 'Обновить',
-        click: function(){
+        click: function () {
           win.reload()
         }
       }));
@@ -114,14 +110,55 @@
       nw.Window.get().menu = menu;
     };
 
-    function debug(){
+    function yesno(param) {   
+      console.log(menu.items); 
+      let items = menu.items;
+      items[0].enabled = false;
+      menu.insert(items[0],3)
+      menu.items[0].enabled = false;
+      menu.items[0].label = "asd";
+      menu.items[1].enabled = false;
+      nw.Window.get().menu.items[0].enabled = false;
+      // nw.Window.get().menu = new nw.Menu({type: 'menubar'});
+
+      var errorWindow = document.createElement('div');
+      errorWindow.className = 'yesno';
+      errorWindow.innerHTML = `
+        <div class="dark">
+          <div class="error-window">
+            <p>${param.text}</p>
+            <div class="buttons">
+              <div class="button b-ok" onclick="okClick()">ok</div>
+              <div class="button b-cancel" onclick="cancelClick()">cancel</div>
+            </div>
+          </div>
+        </div>      
+      `;
+      document.body.appendChild(errorWindow);
+    }
+
+    function okClick() {
+      let errWin = document.getElementsByClassName('yesno');
+      document.body.removeChild(errWin[0]);
+      creating = false;
+      createTests();
+      createMenu();
+    }
+
+    function cancelClick() {
+      let errWin = document.getElementsByClassName('yesno');
+      document.body.removeChild(errWin[0]);
+      createMenu();
+    }
+
+    function debug() {
       createTests();
     }
 
     createMenu();
     debug();
 
-    
+
 
 
   </script>

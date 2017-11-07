@@ -1,7 +1,8 @@
 {
   "name": "Lattest",
-  "main": "change.html",
+  "main": "index.html",
   "window": {
+    "show": false,
     "height": 400,
     "width": 300
   }

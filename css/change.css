@@ -42,3 +42,51 @@ input, textarea{
     display: inline-block;
     width: 20px;
 }
+
+.dark{
+  position: fixed;
+  background-color: #0000009f;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dark .error-window{
+  background-color: white;
+  padding: 20px;
+}
+
+.buttons{
+  display: flex;
+  justify-content: center;
+}
+
+.buttons .button{
+  width: 50px;
+  text-align: center;
+  cursor: pointer;
+  margin: 10px;
+  padding: 5px;
+  border: 1px solid grey;
+  color: white;
+}
+
+.buttons .b-ok{
+  background-color: #084d17cb;
+}
+
+.buttons .b-cancel{
+  background-color: #4d0808d3;
+}
+
+.buttons .b-ok:hover{
+  background-color: #108b2bcb;
+}
+
+.buttons .b-cancel:hover{
+  background-color: #8d0d0dd3;
+}

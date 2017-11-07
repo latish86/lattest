@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--
+Инициализация переменных.
+
+
+
+
+
+
+
+-->
+<html lang="en">
+
+<head>
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    
+    nw.global.currentTest = undefined;
+
+
+
+    var initpage = './html/change.html';
+    var win = nw.Window.get(); // main window
+
+    nw.Window.open(initpage, {}, function (new_win) {
+      win.close();
+    });
+    
+  </script>
+</body>
+
+</html>
