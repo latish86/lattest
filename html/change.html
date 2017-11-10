@@ -11,16 +11,18 @@
 </head>
 
 <body>
+  <input type="file" style="display: none">
   <div class="content">
 
   </div>
   <script>
+    var fs = require("fs");
     var win = nw.Window.get(); // main window
     var creating = false;
     var content = document.getElementsByClassName('content');
     var menu;
 
-   
+
 
     function createTests() {
       if (creating) {
@@ -50,8 +52,7 @@
             </div>\
           </div>\
           <div class="add-question">Добавить вопрос</div>\
-        </div>\
-      ';
+        </div>';
         creating = true;
       }
     }
@@ -61,8 +62,6 @@
       menu = new nw.Menu({ type: 'menubar' });
 
       var win = nw.Window.get(); // current window
-
-      
 
       win.height = 600;
       win.width = 600;
@@ -74,7 +73,12 @@
         label: 'Создать тест',
         click: createTests
       }));
-      submenu.append(new nw.MenuItem({ label: 'Открыть тест' }));
+      submenu.append(new nw.MenuItem({
+        label: 'Открыть тест',
+        click: function () {
+          openTest()
+        }
+      }));
       submenu.append(new nw.MenuItem({ type: "separator" }));
       submenu.append(new nw.MenuItem({ label: 'Сохранить тест' }));
       submenu.append(new nw.MenuItem({ label: 'Сохранить тест как' }));
@@ -107,16 +111,79 @@
           win.reload()
         }
       }));
+      menu.append(new nw.MenuItem({
+        label: 'Write JSON',
+        click: function () {
+          writeJSON();
+        }
+      }));
+      menu.append(new nw.MenuItem({
+        label: 'Read JSON',
+        click: function () {
+          readJSON();
+        }
+      }));
 
       // Assign it to `window.menu` to get the menu displayed
       nw.Window.get().menu = menu;
     };
 
-    function yesno(param) {   
-      console.log(menu.items); 
+    function writeJSON() {
+      let userData = {
+        title: "Тестовый тест)))",
+        create_date: "Бесконечность",
+        last_change_date: "Вчера",
+        questions: [
+          {
+            title: "Вопрос №1",
+            description: "ТЕкст вопроса №1",
+            answers: [
+              {
+                answer: "Answer a"
+              },
+              {
+                answer: "Answer b"
+              },
+              {
+                answer: "Answer c"
+              }
+            ]
+          },
+          {
+            title: "Вопрос №2",
+            description: "ТЕкст вопроса №2",
+            answers: [
+              {
+                answer: "Answer a"
+              },
+              {
+                answer: "Answer b"
+              },
+              {
+                answer: "Answer c"
+              }
+            ]
+          }
+        ]
+      };
+      var str = JSON.stringify(userData);
+      fs.writeFileSync('./tests/user.lat', str);
+      alert(str);
+    }
+
+    function readJSON() {
+      let data = fs.readFileSync('./tests/user.lat', {
+        encoding: 'utf8'
+      });
+      var json = JSON.parse(data)
+      alert(json.questions[0].description)
+    }
+
+    function yesno(param) {
+      console.log(menu.items);
       let items = menu.items;
       items[0].enabled = false;
-      menu.insert(items[0],3)
+      menu.insert(items[0], 3)
       menu.items[0].enabled = false;
       menu.items[0].label = "asd";
       menu.items[1].enabled = false;
@@ -153,12 +220,57 @@
       createMenu();
     }
 
+
+
+    function openTest() {
+      let renderTest = function (json) {
+        var content = document.getElementsByClassName('content');
+        console.log(json.title)
+        content[0].innerHTML = `
+        <div class="title">
+          <div>Название теста: </div><input type="text" value="${json.title}">
+        </div>`
+      }
+
+
+      var fileinput = document.querySelector('input[type=file]');
+      fileinput.addEventListener("change", () => {
+        var path = fileinput.value;
+        fs.open(path, 'r', function (err, file_handle) {
+          if (!err) {
+            fs.readFile(file_handle, 'utf8', function (err, data) {
+              if (!err) {
+                // Всё прошло хорошо, делаем нужные действия и закрываем соединение с файлом.
+                var json = JSON.parse(data);
+                renderTest(json);
+                fs.close(file_handle);
+              } else {
+                // Произошла ошибка при записи
+                consle.log('Ошибка при записи: ' + err)
+              }
+            });
+          } else {
+            consle.log('Ошибка открытия файла: ' + err)
+          }
+        });
+
+
+
+        // fs.readFile(path, 'utf8', (err, data) => {
+        //   if (err) {
+        //     console.log(err);
+        //   }
+
+        // });
+      })
+      fileinput.click();
+    }
+
     function debug() {
       createTests();
     }
 
     createMenu();
-    debug();
 
 
 
