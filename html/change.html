@@ -20,6 +20,8 @@
     var content = document.getElementsByClassName('content');
     var menu;
 
+   
+
     function createTests() {
       if (creating) {
         param = {
@@ -34,8 +36,8 @@
           <div>Название теста: </div><input type="text">\
         </div>\
         <div class="questions">\
-          <div class="questions q1">\
-            <div class="text"><div>Текст вопроса:</div><textarea rows="3"></textarea></div>\
+          <div class="question q1">\
+            <div class="text"><div>Текст вопроса:</div><textarea rows="2"></textarea></div>\
             <div class="answers">\
               <div>Ответы:</div>\
               <ul>\
@@ -58,9 +60,9 @@
       // Create an empty menubar
       menu = new nw.Menu({ type: 'menubar' });
 
-     
-
       var win = nw.Window.get(); // current window
+
+      
 
       win.height = 600;
       win.width = 600;
@@ -80,7 +82,7 @@
       submenu.append(new nw.MenuItem({
         label: 'Выход в меню',
         click: function () {
-          nw.Window.open('menu.html', {}, function (new_win) {
+          nw.Window.open('./html/menu.html', {}, function (new_win) {
             new_win.height = 400;
             new_win.width = 300;
             win.close();
