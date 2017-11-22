@@ -7,22 +7,53 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/change.css">
+  <script src="../node_modules/vue/dist/vue.js"></script>
   <title>Создать/редактировать тест</title>
 </head>
 
 <body>
   <input type="file" style="display: none">
-  <div class="content">
+  <div class="content" id="app">
 
   </div>
   <script>
     var fs = require("fs");
+    var vue = require("vue");
     var win = nw.Window.get(); // main window
     var creating = false;
     var content = document.getElementsByClassName('content');
     var menu;
 
 
+
+    function createVUE(json) {
+      content[0].innerHTML = `
+        <div class="title">\
+          <div>Название теста: </div><input type="text" v-model="title">\          
+        </div>
+        <div class="questions">
+          <div>Вопросы:</div>
+          <div v-for="(question, index) in questions" v-bind:class="'question q'+index">            
+            <div>Title вопроса: <input type="text" v-bind:value="question.title"></div>
+            <div class="text">
+              <div>Текст вопроса:</div>
+              <textarea rows="2" v-bind:value="question.description" ></textarea>
+              <div>Ответы:</div>
+              <div v-for="(answer, answer_index) in question.answers">
+                Ответ № {{ answer_index }}: <input type="text" v-bind:value="answer.answer">
+              </div>  
+            </div>
+          </div>
+        </div>
+      `
+      var app = new Vue({
+        el: '#app',
+        data: {
+          title: json.title,
+          questions: json.questions          
+        }
+      })
+    }
 
     function createTests() {
       if (creating) {
@@ -108,7 +139,13 @@
       menu.append(new nw.MenuItem({
         label: 'Обновить',
         click: function () {
-          win.reload()
+          win.reload();
+        }
+      }));
+      menu.append(new nw.MenuItem({
+        label: 'Vue',
+        click: function () {
+          createVUE();
         }
       }));
       menu.append(new nw.MenuItem({
@@ -223,11 +260,21 @@
     function openTest() {
       let renderTest = function (json) {
         var content = document.getElementsByClassName('content');
-        console.log(json.title)
-        content[0].innerHTML = `
-        <div class="title">
-          <div>Название теста: </div><input type="text" value="${json.title}">
-        </div>`
+        console.log(json.title);
+        let html = `
+        <div class="title"></div>
+        <div class="questions"></div>`
+
+        let title = document.getElementsByClassName('title');
+        title.innerHTML = `<div>Название теста: </div>${json.title}`;
+
+
+
+
+        content[0].innerHTML = html;
+
+
+
       }
 
 
@@ -241,7 +288,7 @@
               if (!err) {
                 // Всё прошло хорошо, делаем нужные действия и закрываем соединение с файлом.
                 var json = JSON.parse(data);
-                renderTest(json);
+                createVUE(json);
                 fs.close(file_handle);
               } else {
                 // Произошла ошибка при записи
